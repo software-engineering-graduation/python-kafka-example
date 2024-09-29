@@ -1,0 +1,41 @@
+# Abordagens de Mensagens no RabbitMQ
+
+## 1. Modelo Pub/Sub (Publicador/Assinante)
+
+### Visão Geral
+O modelo Pub/Sub é um padrão de mensagens onde um publicador envia mensagens para um ou mais assinantes sem saber quem eles são. Nesse modelo, as mensagens são categorizadas e enviadas para uma exchange, que então roteia as mensagens para as filas apropriadas com base nas chaves de roteamento.
+
+### Características
+- **Desacoplamento**: Publicadores e assinantes são desacoplados. O publicador não precisa saber sobre os assinantes.
+- **Múltiplos Assinantes**: Vários assinantes podem receber a mesma mensagem publicada por um único publicador. Isso é útil para transmitir mensagens a vários consumidores.
+- **Exchanges de Tópicos**: Nesta implementação, uma exchange de tópicos é usada, permitindo um roteamento complexo das mensagens com base nas chaves de roteamento.
+
+### Casos de Uso
+- Sistemas de notificação (por exemplo, alertas, atualizações).
+- Fluxos de dados em tempo real (por exemplo, atualizações meteorológicas).
+
+### Implementação de Exemplo
+Neste projeto:
+- O script `pub.py` publica novos sabores de sorvete em uma exchange de tópicos chamada `flavors`.
+- O script `sub.py` se inscreve na exchange `flavors` e escuta anúncios de novos sabores, processando-os à medida que chegam.
+
+---
+
+## 2. Mensageria Baseada em Filas
+
+### Visão Geral
+Em uma abordagem de mensageria baseada em filas, as mensagens são enviadas para uma fila específica, que é então consumida por um ou mais consumidores. Esse modelo garante que cada mensagem seja processada por apenas um consumidor.
+
+### Características
+- **Consumidor Único**: Cada mensagem é consumida por apenas um consumidor, garantindo que não haja duplicação no processamento.
+- **Balanceamento de Carga**: Se houver vários consumidores consumindo da mesma fila, a carga de trabalho pode ser equilibrada entre eles.
+- **Ordem de Processamento**: As mensagens são geralmente processadas na ordem em que foram recebidas, garantindo que a sequência de tarefas seja mantida.
+
+### Casos de Uso
+- Filas de tarefas (por exemplo, trabalhos em segundo plano, processamento de pedidos).
+- Distribuição de carga de trabalho (por exemplo, processamento de trabalhos entre vários workers).
+
+### Implementação de Exemplo
+Neste projeto:
+- O script `producer.py` envia pedidos de sorvete para uma fila chamada `sorvete_queue`.
+- O script `consumer.py` escuta a `sorvete_queue` e processa cada pedido à medida que chega.
